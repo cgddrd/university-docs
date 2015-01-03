@@ -26,7 +26,7 @@
 
 %%%%% TITLE %%%%%
 \newcommand{\notefront} {
-\pagenumbering{roman}
+\pagenumbering{arabic}
 \begin{center}
 
 \textbf{{\Large \noun{\thiscoursecode}}} \vspace{0.2cm}
@@ -58,48 +58,23 @@
   % Turn section numbering back on. 
   \setcounter{secnumdepth}{5}
   
-\section{Introduction}\label{introduction}
-
-  Computer vision is the science of \textbf{\emph{extracting information}} about
-  objects in the 3D-world using noisy, quantised 2D-projections.
+%\section{Introduction}\label{introduction}
+%
+%  Computer vision is the science of \textbf{\emph{extracting information}} about
+%  objects in the 3D-world using noisy, quantised 2D-projections.
 
 \section{Image Formation}\label{image-formation}
 
 \subsection{Geometry of Image
 Formation}\label{geometry-of-image-formation}
+ 
+\textbf{ Simple model:} Pinhole Camera (2D-representation of 3D-world)  \\
+   
+\textbf{Issue}: The distance between the \emph{camera} and the \emph{object} is \textbf{non-recoverable} from a \emph{single viewpoint}.
+
+\subsubsection{Camera Distortions}
 
 \begin{itemize}
-\item
-  Simple model: Pinhole Camera (2D-representation of 3D-world)
-
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    Image plane
-  \item
-    Focal Point
-  \item
-    World
-  \end{itemize}
-\item
-  When projecting objects, they appear upside down. Objects that are
-  closer appear bigger.
-\item
-  Difficulty of CV = The distance between the \emph{camera} and the
-  \emph{object} is \textbf{non-recoverable} from a \emph{single
-  viewpoint}.
-\end{itemize}
-
-// Maths for projection.
-
-\begin{itemize}
-\item
-  Cameras are not good at establishing distance between camera and
-  object.
-\item
-  Real cameras have complex optics and control systems.
-
-  \begin{itemize}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
     Limited DoF (Depth of Field = Length between lens and object that is
@@ -111,19 +86,10 @@ Formation}\label{geometry-of-image-formation}
   \item
     Saturation (Saturated images are those registering at full 255-level
     brightness.)
-  \item
-    Various automatic controls
   \end{itemize}
-\item
-  Need for better models for 3D extraction (Calibration - Matrix can
-  transform camera coords into 3D frame)
-\end{itemize}
+ 
+\subsection{Radiosity}
 
-\subsection{Radiosity}\label{radiosity}
-
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
   Brightness at any point depends on:
 
   \begin{itemize}
@@ -138,12 +104,15 @@ Formation}\label{geometry-of-image-formation}
   \item
     Nature of the surface (matte, mirror etc.) (If the surface is black,
     most of the light will be absorbed.)
-
+ \end{itemize}
+ 
+ \subsubsection{Surface Types}
+ 
     \begin{enumerate}
     \def\labelenumi{\arabic{enumi}.}
     \itemsep1pt\parskip0pt\parsep0pt
     \item
-      Lambertian Surface
+     \textbf{Lambertian Surface}
 
       \begin{itemize}
       \itemsep1pt\parskip0pt\parsep0pt
@@ -153,7 +122,7 @@ Formation}\label{geometry-of-image-formation}
         Brightness is \emph{independent} of viewpoint.
       \end{itemize}
     \item
-      Specular Surface
+      \textbf{Specular Surface}
 
       \begin{itemize}
       \itemsep1pt\parskip0pt\parsep0pt
@@ -165,40 +134,24 @@ Formation}\label{geometry-of-image-formation}
         around normal) and doesn't change colour brightness etc.
       \end{itemize}
     \end{enumerate}
-  \end{itemize}
-\end{itemize}
 
 \subsection{Digitising}\label{digitising}
 
-\begin{itemize}
-\item
   Images do not provide a smooth, continuous representation of the
-  world.
-\item
-  Images are composed of a 2D-array of pixel values representing what is
-  projected from the world.
-\item
-  \textbf{Limited resolution}
-\item
-  Array of \textbf{discontinuous} values causes errors which makes image
-  processing \emph{difficult.}
+  world and are composed of a 2D-array of pixel values representing what is
+  projected from the world.  \\
 
-  \begin{itemize}
-  \item
-    Pixels have a \emph{finite} range of grey values also.
-  \item
-    Along with colour (0-255 = RGB colour space)
-  \end{itemize}
-\item
-  Images have \textbf{\emph{distortion/noise}}:
+ \textbf{Issue: Limited resolution} - Array of \textbf{discontinuous} values causes errors which makes image processing difficult.
+
+\subsubsection{Image Distortion}
 
   \begin{itemize}
   \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    From the atmosphere, acquisition process (lens), acquisition process
-    (sensor), quantisation (pixels) and colour quantisation (RGB).
+  \item Atmosphere (light, wind, rain etc.)
+    \item Acquisition process (lens), 
+    \item Acquisition process (sensor)
+    \item Quantisation (pixels) and colour quantisation (RGB).
   \end{itemize}
-\end{itemize}
 
 \subsubsection{Colour Spaces}\label{colour-spaces}
 
@@ -278,17 +231,26 @@ Calibration/Correction}\label{colour-calibrationcorrection}
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \itemsep1pt\parskip0pt\parsep0pt
+
 \item
-  Parallel Projection
+  Perspective Projection
 
   \begin{itemize}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
     Pinhole model uses \textbf{perspective} projection.
   \item
+    Perspective projection loses \emph{size} information.
+  \end{itemize}
+\item
+  Parallel Projection
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
     Parallel projection does not lose \emph{size} information, but
-    \emph{absolute depth} is lost. (= Pinhole model with \emph{infinite}
-    focal length)
+    \emph{absolute depth} is lost (Pinhole model with \emph{infinite}
+    focal length).
   \end{itemize}
 \item
   Omni-directional
@@ -300,160 +262,118 @@ Calibration/Correction}\label{colour-calibrationcorrection}
   \item
     Rotating flat mirror, or fixed hyperbolic mirror (visual compass).
   \item
-    Causes \emph{distortions} and \emph{non-homogenous} resolution
+    Causes \emph{\textbf{distortions}} and \emph{non-homogeneous} resolution
     (parts of the from the compass are higher resolution than others.).
   \item
-    Can correct distortion by determining a transofrmation matrix that
-    can balance out the effects of the lens
-
-    \begin{itemize}
-    \itemsep1pt\parskip0pt\parsep0pt
-    \item
-      \textbf{Chessboard example} - Determine matrix to make chessboard
-      have right-angles.
-    \end{itemize}
+    Can correct distortion by determining a transformation matrix that
+    can balance out the effects of the lens (e.g. Chessboard calibration).
   \end{itemize}
 \end{enumerate}
 
 \section{Edge Detection}\label{edge-detection}
 
-\begin{itemize}
-\item
-  Images are perceived as \emph{regions}.
-\item
-  The regions are surrounded by \emph{boundaries}.
-\item
-  The boundaries are made up of \emph{edges} at the \textbf{\emph{pixel
-  level}}.
-\item
-  Edges/boundaries are detected by looking for \textbf{\emph{sharp
-  changes in \emph{intensity} between pixels}}
-\item
-  **\_ Located by differentiating the intensity function once (for
-  maxima) or twice (for zero crossings)\_**.
+  Images are perceived as \emph{\textbf{regions}}. \\
 
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    The intensity profile is a {[}digital{]} function. There is an
-    obvious and well-known way of locating the sharp changes.
-  \item
-    \emph{Differentiate} the profile and look for \emph{very high} or
-    \emph{very low} values. (Differentiate as we are interested in the
-    gradient (steep slopes)) // INSERT DIFFERENTIATION MATHS
-  \end{itemize}
-\end{itemize}
+  The regions are surrounded by \emph{\textbf{boundaries}}. \\
+
+  The boundaries are made up of \emph{\textbf{edges}} at the \textbf{\emph{pixel
+  level}}. \\
+
+  Edges/boundaries are detected by looking for \textbf{\emph{sharp
+  changes in \emph{intensity} between pixels}}. \\
+  
+   Located by \textbf{\textit{differentiating}} the intensity function once (maxima) or twice (zero crossings).
+  
+  \subsection{Differentiation}
+  
+  Gives a good indication of the \textbf{gradient} of a digital function.
+  
+  $$ f(x) = x_0, x_1, x_2, x_3, ...$$
+  
+  $$ \frac{df}{dx} \approx \frac{x_2 - x_0}{2}, \frac{x_3 - x_2}{2}, ..., \frac{x_i+1 - x_i-1}{2}$$
+  
 
 \subsection{Convolution}\label{convolution}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  We can perform the differentiation throughout an entire image to look
-  for very high (dark-to-light) and very low responses (light-to-dark).
+  We can perform \textit{differentiation} throughout an entire image to look
+  for \textbf{very high} (dark-to-light) and \textbf{very low} responses (light-to-dark).\\
 
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    \textbf{Convolution = Computing horizontal derivatives.}
-  \end{itemize}
-\item
-  Drag a $[-1 0 1]$ \emph{mask/kernel} through the image row-by-row.
-\item
-  \emph{The outcome of the kernel is observed to detect edges.}
-\end{itemize}
+  Drag a $[-1,0,1]$ \textbf{mask/kernel} through the image row-by-row whose result is observed to detect edges.
 
-\subsection{Tools}\label{tools}
+\subsection{First Order Detection}\label{tools}
 
 \subsubsection{Sobel Edge Detector
 (1968)}\label{sobel-edge-detector-1968}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Detects two edge signals at each pixel - one \emph{vertical} ane one
-  \emph{horizontal}.
-\item
+  Detects two edge signals at each pixel - one \textbf{vertical} and one
+  \textbf{horizontal}. (\textbf{Light} = Low-to-high, \textbf{Dark} = High-to-Low).\\
+  
   Addresses two main issues:
 
-  \begin{enumerate}
+  \begin{itemize}
+	
   \def\labelenumi{\arabic{enumi}.}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
-    Noisy edge signals - Use a 3 x 3 kernel instead of 1 x 3 to provide local averaging effect.
+    \textbf{Noisy edge signals} - Use a 3 x 3 kernel instead of 1 x 3 to provide local averaging effect.
   \item
-    Look for both \emph{horizontal} and \emph{vertical} edges -
+    \textbf{Looks for both \emph{horizontal} and \emph{vertical} edges} -
     \emph{Use a 3 x 1 kernel as well as a 1 x 3 respectively}.
-  \end{enumerate}
-\item
-  \emph{Light} = Low-to-high
-\item
-  \emph{Dark} = High-to-low
-\item
+   \end{itemize}
+
   Produces an image-sized array of \textbf{\emph{edge strengths}} using
-  the formula // INSERT PIXEL STRENGTH FORMULA
-\item
-  Can also calculate the \textbf{\emph{direction}} of an edge using the
-  formula //INSERT EDGE DIRECTION FORMUlA
-\item
-  Issues
-
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    Thickening
-  \item
-    Choice of threshold.
-  \end{itemize}
-\end{itemize}
-
-\subsubsection{Marr-Hildreth Zero-Crossing Edge
-Detector}\label{marr-hildreth-zero-crossing-edge-detector}
-
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Uses Second-Order edge detection by applying \emph{Laplacian} and
-  \emph{Gaussian} to image in order to ``block out'' noise.
-\end{itemize}
+  the formula: $S(x) = \sqrt{S_h(x)^2 + S_v(x)^2}$ where $S_h$ is the horizontal edge, and $S_v$ is the vertical edge. (A \textbf{high value} indicates an edge). \\
+  
+  Can also calculate the \textbf{direction} of an edge using the
+  formula: $\theta(x) = \tan^{-1}S_h(x) / S_v(x)$.
 
 \subsubsection{Canny-Edge Detector
 (1986)}\label{canny-edge-detector-1986}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Still widely used today - Automatically deals with issues Sobel
-  detector has.
-\item
-  First Order detector.
-\item
-  (Iterated) Gaussian blur.
-\item
-  Directional first derivative.
-\item
-  \emph{Non-maximal suppression} to suppress \textbf{\emph{thickening}}.
-\item
-  Tracking (hysterisis) to link weak evidence to strong.
-\item
-  Canny detections at increasing (sigma) Gaussian blur.
-  \item Two parameters: How likely it is to find an edge and how likely it is to follow the edge once found. 
-\end{itemize}
+  Utilises (iterated) \textbf{increases} in Gaussian blur and directional first derivative. \\
 
-\subsection{Edge Detection Techniques}\label{edge-detection-techniques}
+  \emph{Non-maximal suppression} to suppress \textbf{\emph{thickening}}. \\
+  
+  Tracking (hysterisis) to link weak evidence to strong. \\
+  
+  Canny detections at increasing (sigma) Gaussian blur. \\
+  
+ Two parameters:
+ \begin{itemize}
+ \item How likely it is to find an edge?
+ \item How likely it is to follow the edge once found?
+ \end{itemize}
 
-\subsubsection{Zero Crossings}\label{zero-crossings}
+\subsection{Second-Order Detection}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
+%\subsubsection{Algorithm (General)}
+%
+%  \begin{enumerate}
+%  \def\labelenumi{\arabic{enumi}.}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Choose a small sigma ($\sigma$) (used to set the
+%    Gaussian ``blurryness'').
+%  \item
+%    Blur the image with a suitable \textbf{\emph{Gaussian}}.
+%  \item
+%    Filter with a \textbf{\emph{Laplacian}} (zeroes are the edges).
+%  \item
+%    Increase sigma and go again to locate \emph{coarser} edges.
+%  \item
+%    Accumulate \emph{pyramid} of edge detections.
+%  \end{enumerate}
+
+
+\subsubsection{Zero Crossings}
+
+  Provides a powerful mechanism to obtain the \textbf{\emph{location}}
+  of an edge within an image.\\
+  
   Differentiate the (already calculated) first differential to show a
   sharp ``\emph{up-down signal}'' that \textbf{\emph{crosses zero at the
-  edge}}.
-\item
-  Provides a powerful mechanism to obtain the \textbf{\emph{location}}
-  of an edge within an image.
-\item
+  edge}}.\\
+  
   Issues
 
   \begin{enumerate}
@@ -466,17 +386,7 @@ Detector}\label{marr-hildreth-zero-crossing-edge-detector}
     \itemsep1pt\parskip0pt\parsep0pt
     \item
       (As with Sobel) we do not know in advance the direction of the
-      edges.
-    \item
-      \textbf{Solution: Laplacian} - Merge of the two second derivates
-      into \emph{one measure}.
-
-      \begin{itemize}
-      \itemsep1pt\parskip0pt\parsep0pt
-      \item
-        Zero-crossing of the Laplacian \textbf{\emph{correspond
-        accurately}} to edges.
-      \end{itemize}
+      edges. \textbf{Solution = Laplacian}
     \end{itemize}
   \item
     Noise
@@ -484,58 +394,47 @@ Detector}\label{marr-hildreth-zero-crossing-edge-detector}
     \begin{itemize}
     \itemsep1pt\parskip0pt\parsep0pt
     \item
-      Digital approximations to the first (d/dx) and second
-      (d\textsuperscript{2/dx}2) derivatives \emph{amplify noise}.
-    \item
-      \textbf{Solution: Gaussian Blur} - Simulate blurring of images
-      before looking for edges.
-
-      \begin{itemize}
-      \itemsep1pt\parskip0pt\parsep0pt
-      \item
-        Allows the \textbf{\emph{strongest}} edges to remain, and the
-        \textbf{\emph{weaker}} edges and \textbf{\emph{noise}} to be
-        \emph{dampened}.
-      \item
-        Helps to \textbf{\emph{reduce noise}} so the edges are clearer
-        when analysing the derivatives.
-      \item
-        Applied as a \emph{digital kernel}.
-      \item
-        //INSERT GAUSSIAN BLUR FORMULA
-      \end{itemize}
+      Digital approximations to the first ($\frac{d}{dx}$) and second
+      ($\frac{d^2}{dx^2}$) derivatives \emph{amplify noise}. \textbf{Solution = Gaussian Blur}
     \end{itemize}
   \end{enumerate}
-\item
-  Second-order Edge Detection (Describes \emph{Laplacian of Gaussian}
-  edge detector)
 
-  \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    Choose a small sigma (//INSERT SIGMA) (used to set the
-    ``blurryness'')
-  \item
-    Blur the image with a suitable \textbf{\emph{Gaussian}}
-  \item
-    Filter with a \textbf{\emph{Laplacian}}
-  \item
-    Increase sigma and go again to locate \emph{coarser} edges
-  \item
-    Accumulate \emph{pyramid} of edge detections
-  \end{enumerate}
-\end{itemize}
+\subsubsection{Gaussian Blur}
+Simulate blurring of images before looking for edges. \\
 
-\section{Edge Groupings}\label{edge-groupings}
+Allows the \textbf{\emph{strongest}} edges to remain, and the \textbf{\emph{weaker}} edges and \textbf{\emph{noise}} to be \emph{dampened}. \\
+
+Helps to \textbf{\emph{reduce noise}} so the edges are clearer when analysing the derivatives. \\
+
+Applied as a \emph{digital kernel}.
+
+$$ G(x, y) = \frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}}$$
+
+\subsubsection{Laplacian}
+
+Merge of the two second derivatives into \emph{one measure}. \\
+
+\textbf{Zero-crossing of the Laplacian \emph{correspond accurately} to edges.}
+
+$$ \nabla ^2I(x, y) = \frac{\delta {^2}I(x, y)}{\delta x^2} + \frac{\delta ^2I(x, y)}{\delta y^2}$$
+
+\subsubsection{Marr-Hildreth Zero-Crossing Edge
+Detector}\label{marr-hildreth-zero-crossing-edge-detector}
 
 \begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
 \item
+  Uses Second-Order edge detection by applying \emph{Laplacian} and
+  \emph{Gaussian} to image in order to ``block out'' noise.
+\end{itemize}
+      
+\section{Edge Groupings}\label{edge-groupings}
+
   Take the single pixels extracted (or groups of pixels) from edge
   detection and \emph{group} them into higher-level features/models
-  (e.g.~straight lines, curves, blobs, ribbons etc.)
-\item
-  Two main functions of these abstract mathematical models:
+  (e.g.~straight lines, curves, blobs, ribbons etc.) \\
+
+  Two main functions of these abstract mathematical models: (cycle between both)
 
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
@@ -548,44 +447,31 @@ Detector}\label{marr-hildreth-zero-crossing-edge-detector}
     until the distance goes down to zero.
   \end{enumerate}
 
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    \textbf{Process:} Distance function, search function, distance
-    function, search function etc..
-  \end{itemize}
-\end{itemize}
+\subsection{Edge-Grouping Mechanisms}
 
-\subsection{Bottom-up approaches}\label{bottom-up-approaches}
+\begin{enumerate}
+
+\item \textbf{Edge Following (Bottom-Up)}
 
 \begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Edge pixels grouped by \textbf{\emph{edge following}}.
-
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
+ \item
     From an edge pixel, move along the edge direction until the next
     edge pixel is encountered.
-  \end{itemize}
 \item
   Issues:
 
   \begin{itemize}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
-    Camera/digitisation noise
+    Camera/digitisation noise.
   \item
-    Gaps
+    Gaps.
   \item
-    Complex topology
-  \item
-    Multiple ``garden paths''
+    Multiple ``garden paths''.
   \end{itemize}
 \end{itemize}
 
-\subsection{Top-down approaches}\label{top-down-approaches}
+\item \textbf{Projection (Top-Down)}
 
 \begin{itemize}
 \item
@@ -597,45 +483,32 @@ Detector}\label{marr-hildreth-zero-crossing-edge-detector}
   \begin{itemize}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
-    We need to know what we are looking for (e.g.~Person, Car etc.) -
-    Model must fit/match what we need to find.
+    We need to know what we are looking for (e.g. Person, Car etc).
   \item
-    Projection noise
+    Projection noise.
   \item
     Matching complexity.
   \end{itemize}
-\end{itemize}
-
-\subsection{Line fitting}\label{line-fitting}
-
-\begin{itemize}
-\item
-  Finding a line (contour) through a set of pixels.
-\item
-  Fit model in the form: y = mx + c
-
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    x, y = Pixel coords.
-  \item
-    alpha, beta = the params of the line.
   \end{itemize}
-\item
-  Locate the Best Fit: // INSERT BEST FIT LINE FITTING MATHS
+\end{enumerate}
 
-  \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
+\subsection{Line Fitting}
+
+  Finding the line (contour) through a set of pixels using a model in the form: $y = mx + c$ (where $mx$ is the gradient, and $c$ is the intersection with the Y-axis) that \textbf{best fits your model and data}.
+
+\subsubsection{Best Fit}
+
     Square normals from the proposed line to the point. (Distance
-    between line and point (di))
-  \item
-    The best fit will be the line with the \textbf{\emph{total square
-    distances}} from the pixels to that line.
-  \end{enumerate}
-\end{itemize}
+    between line and point ($di$)). 
+    
+        \begin{figure}[ht!]      
+	\centering 
+	\includegraphics[scale=0.3]{best_fit.png}
+\end{figure}
 
+    The best fit will be the line with the \textbf{lowest} total square
+    distances from the pixels to that line.
+    
 \subsubsection{Hough Transform (Finding
 Lines)}\label{hough-transform-finding-lines}
 
