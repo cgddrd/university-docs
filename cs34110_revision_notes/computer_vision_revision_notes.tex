@@ -58,17 +58,17 @@
   % Turn section numbering back on. 
   \setcounter{secnumdepth}{5}
   
-%\section{Introduction}\label{introduction}
-%
-%  Computer vision is the science of \textbf{\emph{extracting information}} about
-%  objects in the 3D-world using noisy, quantised 2D-projections.
+\section{Introduction}\label{introduction}
+
+  Computer vision is the science of \textbf{\emph{extracting information}} about
+  objects in the 3D-world using noisy, quantised 2D-projections.
 
 \section{Image Formation}\label{image-formation}
 
 \subsection{Geometry of Image
 Formation}\label{geometry-of-image-formation}
  
-\textbf{ Simple model:} Pinhole Camera (2D-representation of 3D-world)  \\
+\textbf{Simple model:} Pinhole Camera (2D-representation of 3D-world)  \\
    
 \textbf{Issue}: The distance between the \emph{camera} and the \emph{object} is \textbf{non-recoverable} from a \emph{single viewpoint}.
 
@@ -233,41 +233,41 @@ Calibration/Correction}\label{colour-calibrationcorrection}
 \itemsep1pt\parskip0pt\parsep0pt
 
 \item
-  Perspective Projection
+  Perspective Projection (Pinhole-model, loses size information)
 
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    Pinhole model uses \textbf{perspective} projection.
-  \item
-    Perspective projection loses \emph{size} information.
-  \end{itemize}
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Pinhole model uses \textbf{perspective} projection.
+%  \item
+%    Perspective projection loses \emph{size} information.
+%  \end{itemize}
 \item
-  Parallel Projection
+  Parallel Projection (Loses absolute depth)
 
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    Parallel projection does not lose \emph{size} information, but
-    \emph{absolute depth} is lost (Pinhole model with \emph{infinite}
-    focal length).
-  \end{itemize}
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Parallel projection does not lose \emph{size} information, but
+%    \emph{absolute depth} is lost (Pinhole model with \emph{infinite}
+%    focal length).
+%  \end{itemize}
 \item
-  Omni-directional
+  Omni-directional (360-degree, mirror, distortions (use transformation matrix)
 
-  \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
-  \item
-    Provides 360 degree view from single image.
-  \item
-    Rotating flat mirror, or fixed hyperbolic mirror (visual compass).
-  \item
-    Causes \emph{\textbf{distortions}} and \emph{non-homogeneous} resolution
-    (parts of the from the compass are higher resolution than others.).
-  \item
-    Can correct distortion by determining a transformation matrix that
-    can balance out the effects of the lens (e.g. Chessboard calibration).
-  \end{itemize}
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Provides 360 degree view from single image.
+%  \item
+%    Rotating flat mirror, or fixed hyperbolic mirror (visual compass).
+%  \item
+%    Causes \emph{\textbf{distortions}} and \emph{non-homogeneous} resolution
+%    (parts of the from the compass are higher resolution than others.).
+%  \item
+%    Can correct distortion by determining a transformation matrix that
+%    can balance out the effects of the lens (e.g. Chessboard calibration).
+%  \end{itemize}
 \end{enumerate}
 
 \section{Edge Detection}\label{edge-detection}
@@ -292,7 +292,6 @@ Calibration/Correction}\label{colour-calibrationcorrection}
   
   $$ \frac{df}{dx} \approx \frac{x_2 - x_0}{2}, \frac{x_3 - x_2}{2}, ..., \frac{x_i+1 - x_i-1}{2}$$
   
-
 \subsection{Convolution}\label{convolution}
 
   We can perform \textit{differentiation} throughout an entire image to look
@@ -330,15 +329,16 @@ Calibration/Correction}\label{colour-calibrationcorrection}
 \subsubsection{Canny-Edge Detector
 (1986)}\label{canny-edge-detector-1986}
 
-  Utilises (iterated) \textbf{increases} in Gaussian blur and directional first derivative. \\
+\textbf{Algorithm:}
 
-  \emph{Non-maximal suppression} to suppress \textbf{\emph{thickening}}. \\
+  \begin{enumerate}
+  \item Blur image with (iterated) \textbf{increases} in Gaussian blur.
+  \item Identify intensity gradients via directional \textbf{first} derivative.
+  \item \emph{Non-maximal suppression} to suppress \textbf{thickening} (i.e. re-thin edges that are now blurry). 
+  \item Track edge (via. \textit{hysteresis}) to suppress all weak edges not connected to strong edges.
+  \end{enumerate}
   
-  Tracking (hysterisis) to link weak evidence to strong. \\
-  
-  Canny detections at increasing (sigma) Gaussian blur. \\
-  
- Two parameters:
+\textbf{Parameters:}
  \begin{itemize}
  \item How likely it is to find an edge?
  \item How likely it is to follow the edge once found?
@@ -346,23 +346,23 @@ Calibration/Correction}\label{colour-calibrationcorrection}
 
 \subsection{Second-Order Detection}
 
-%\subsubsection{Algorithm (General)}
-%
-%  \begin{enumerate}
-%  \def\labelenumi{\arabic{enumi}.}
-%  \itemsep1pt\parskip0pt\parsep0pt
-%  \item
-%    Choose a small sigma ($\sigma$) (used to set the
-%    Gaussian ``blurryness'').
-%  \item
-%    Blur the image with a suitable \textbf{\emph{Gaussian}}.
-%  \item
-%    Filter with a \textbf{\emph{Laplacian}} (zeroes are the edges).
-%  \item
-%    Increase sigma and go again to locate \emph{coarser} edges.
-%  \item
-%    Accumulate \emph{pyramid} of edge detections.
-%  \end{enumerate}
+\subsubsection{Algorithm (General)}
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Choose a small sigma ($\sigma$) (used to set the
+    Gaussian ``blurryness'').
+  \item
+    Blur the image with a suitable \textbf{\emph{Gaussian}}.
+  \item
+    Filter with a \textbf{\emph{Laplacian}} (zeroes are the edges).
+  \item
+    Increase sigma and go again to locate \emph{coarser} edges.
+  \item
+    Accumulate \emph{pyramid} of edge detections.
+  \end{enumerate}
 
 
 \subsubsection{Zero Crossings}
@@ -481,7 +481,6 @@ Detector}\label{marr-hildreth-zero-crossing-edge-detector}
   Issues:
 
   \begin{itemize}
-  \itemsep1pt\parskip0pt\parsep0pt
   \item
     We need to know what we are looking for (e.g. Person, Car etc).
   \item
@@ -494,48 +493,38 @@ Detector}\label{marr-hildreth-zero-crossing-edge-detector}
 
 \subsection{Line Fitting}
 
-  Finding the line (contour) through a set of pixels using a model in the form: $y = mx + c$ (where $mx$ is the gradient, and $c$ is the intersection with the Y-axis) that \textbf{best fits your model and data}.
-
-\subsubsection{Best Fit}
-
-    Square normals from the proposed line to the point. (Distance
-    between line and point ($di$)). 
+  Finding the line (contour) through a set of pixels that \textbf{best fits your model and data}.\\
+  
+  Achieved through finding the \textbf{parameters of the line} $(\alpha, \beta)$ that provide the best fit. 
+  
+  \begin{enumerate}
+\item Fit model $y = mx + c$ (where $(x,y)$ are the pixel coordinates, $mx$ is the gradient, and $c$ is the intersection with the Y-axis).
+\item For edge pixel $(x_i, y_i)$, $d_i$ is the distance between pixel and the line. 
+\item \textbf{Best Fit} - Find  $(\alpha, \beta)$ so that $d_i = 0$ for all $i$.
+\begin{itemize}
+\item Use \textbf{least squares fit} (handle noise) - Find $(\alpha, \beta)$ such that $\sum _i(d_i)^2$ is at a minimum.
+\item Square normals from the proposed line to the point. (Distance between line and point ($d_i$)).
+\end{itemize}
+\end{enumerate}
     
-        \begin{figure}[ht!]      
-	\centering 
-	\includegraphics[scale=0.3]{best_fit.png}
-\end{figure}
-
-    The best fit will be the line with the \textbf{lowest} total square
-    distances from the pixels to that line.
-    
-\subsubsection{Hough Transform (Finding
-Lines)}\label{hough-transform-finding-lines}
+\subsubsection{Hough Transform}
 
 \begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Line equation: y = mx + c (Constraints on the line parameters)
-\item
-  New line equation: xcostheta + ysintheta + r = 0
-\item
-  All lines going through a pixel create a curve in the \emph{line
-  space} of all the line parameters, ``painted'' a \emph{accumulator
-  array}.
-\item
-  Voting from all edge pixels.
-\item
-  High values in the accumulator indicate lines.
-\item
-  Can be applied to \emph{other geometrical shapes (e.g.~circles)}.
-\item
-  \emph{Point where the most pixels vote is the line that is chosen.}
-\item
-  Pros
+\item Used for finding lines and shapes (e.g. circles) within images. 
+\item Utilises \textbf{hough (feature) space} - \textit{\textbf{Rho/Theta}} space.
+\begin{itemize}
+\item \textbf{Rho} - \textit{Distance to line}.
+\item \textbf{Theta} - \textit{Angle of line with X-axis}.
+\item $y = mx + c$ \textbf{becomes} $x\cos \theta + y \sin \theta + r = 0$.
+\end{itemize}
+\item  \textbf{Constraints} applied on the \textit{line parameters}.
+\item Lines going through a pixel create a curve in the \emph{line space} of all the line parameters, added to a \emph{accumulator array}.
+\item  Voting from all edge pixels - \textbf{Point where the most pixels vote is the line that is chosen}.
+\end{itemize}
+
+  \textbf{Pros:}
 
   \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \itemsep1pt\parskip0pt\parsep0pt
   \item
     Good for \emph{geometrical} feature wrapping.
   \item
@@ -545,35 +534,29 @@ Lines)}\label{hough-transform-finding-lines}
   \item
     Easy and fast to find best line via voting mechanism.
   \end{enumerate}
-\item
-  Cons
+
+
+  \textbf{Cons:}
 
   \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \itemsep1pt\parskip0pt\parsep0pt
   \item
-    Can group widely separated edge pixels. (Both a pro and con)
+    Can group widely separated edge pixels.
   \item
     Depends on a number of parameters (grid size, threshold) that depend
     on \emph{noise levels}.
   \item
     Needs enough \emph{evidence} to work.
   \end{enumerate}
-\end{itemize}
 
 \subsubsection{RANSAC (RANdom SAmple
-Consensus)}\label{ransac-random-sample-consensus}
+Consensus)}
 
-\begin{itemize}
-\item
-  Least squares fit doesn't always work (i.e \emph{outliers} pull the
-  true solution away from \emph{inliers}).
-\item
-  Process
+  \textit{Least squares fit} doesn't always work (\textbf{outliers} pull the
+  true solution away from \textbf{inliers}). \\
+  
+  \textbf{Algorithm:}
 
   \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \itemsep1pt\parskip0pt\parsep0pt
   \item
     Fit model to a random sub-set of points (sample).
   \item
@@ -586,33 +569,31 @@ Consensus)}\label{ransac-random-sample-consensus}
   \item
     Rebuild model with best consensus set.
   \end{enumerate}
-\item
+  
+
   Can estimate no. of iterations needed based on probability of
-  outliers, acceptable error and size of samples set.
-\item
-  Main use at present is for \emph{camera tracking}.
-\item
+  outliers, acceptable error and size of samples set. \\
+
+  Main use at present is for \emph{camera tracking}. \\
+
   Like Hough Transform, can be used for more general model fitting (not
   just lines).
-\end{itemize}
+
 
 \section{Feature Detection}
 
-\begin{itemize}
-\item
-  Detection \textbf{is not} the same as tracking.
-\item
-  Trade-off between \emph{speed} and \emph{precision}.
-\item
-  Model-driven (old) - \emph{Brooks etc.}
-\item
-  Data-driven (new) - \emph{HARRIS/SURF/SIFT etc.}
-\item
-  A good feature should match the following characteristics:
-
+Trade-off between \emph{\textbf{speed}} and \emph{\textbf{precision}}.\\
+  
+\textbf{Types:} 
+  
+\begin{enumerate}
+ \item Model-driven (old) - \emph{\textbf{Brooks} etc.}
+ \item Data-driven (new) - \emph{\textbf{HARRIS/SURF/SIFT }etc.}
+\end{enumerate}
+ 
+ \subsubsection{(Good) Feature Characteristics}
+ 
   \begin{enumerate}
-  \def\labelenumi{\arabic{enumi}.}
-  \itemsep1pt\parskip0pt\parsep0pt
   \item
     \textbf{Repeatability} - Can it be found easily again?
   \item
@@ -630,7 +611,6 @@ Consensus)}\label{ransac-random-sample-consensus}
   \item
     \textbf{Efficiency} - Can we compute the feature quickly?
   \end{enumerate}
-\end{itemize}
 
 \textbf{Features by \textit{their very nature} should be \textit{easy to find again.}}
 
@@ -653,89 +633,79 @@ Consensus)}\label{ransac-random-sample-consensus}
 
 \subsubsection{Harris Corners}\label{harris-corners}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Don't just look at a patch, look at \emph{neighbours} as well.
-\item
-  Neighbourhoods of corners are fairly \emph{unique}.
-\item
-  Harris can be \emph{very fast}.
-\item
-  \textbf{\emph{Good way of finding objects that are easy to find
-  again}}.
-\item
-  //INSERT HARRIS CORNER FUNCTION
-\end{itemize}
+Don't just look at a patch, look at \emph{neighbours} as well. (Neighbourhoods of corners are fairly \emph{unique}). \\
 
-\subsubsection{Harris vs KLT}\label{harris-vs-klt}
+\emph{Very fast}, and \textbf{good at finding objects that are easy to find again}. \\
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  KLT uses a slightly different \emph{scoring function} to Harris.
-\item
-  Harris finds more \emph{interest points} than KLT.
-\item
-  KLT tends to focus more on ``corner-shaped'' parts in the image.
-\end{itemize}
+\textbf{Equation:} 
+$$ E(u, v) = \sum_{x, y} w(x, y)[I(x + u, y + v) - I(x, y)]^2$$
+where $w(x, y)$ is the window function (moves around image), $I(x + u, y + v)$ is the shifted intensity, and $I(x, y)$ is the intensity at the original position. \\
+
+$E(u, v)$ is the ``usefulness'' of a particular region as a corner detector (defined by $(u, v)$).
+
+%\subsubsection{Harris vs KLT}\label{harris-vs-klt}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  KLT uses a slightly different \emph{scoring function} to Harris.
+%\item
+%  Harris finds more \emph{interest points} than KLT.
+%\item
+%  KLT tends to focus more on ``corner-shaped'' parts in the image.
+%\end{itemize}
 
 \subsection{SIFT (Scale Invariant Feature
-Transform)}\label{sift-scale-invariant-feature-transform}
-
+Transform)}
+  
+  Used widely in \textbf{object recognition}. \\
+  
+  \textbf{Expensive to run} (multiple scales = more detections), but there are improvements. \\
+  
 Detects features that are:
 
 \begin{itemize}
 \item
-  Invariant to \textbf{scale}
+  Invariant to \textbf{scale}.
 \item
-  Invariant to \textbf{rotation} in the image plane
+  Invariant to \textbf{rotation} in the image plane.
 \item
-  Invariant to small \textbf{translations/rotations}
+  Invariant to small \textbf{translations/rotations}.
 \item
-  Contain a \textbf{local description} of the image
-\item
-  Used widely in \emph{object recognition}.
-\item
-  \textbf{\emph{Expensive to run}}, but there are improvements.
-\item
-  Multiple scales = \textbf{more detections}.
+  Contain a \textbf{local description} of the image.
+  
 \end{itemize}
 
-\subsubsection{Scale Invariance}\label{scale-invariance}
 
-\begin{itemize}
-\item
-  Uses a \emph{Gaussian pyramid}:
+\subsubsection{SIFT - Scale Invariance}
+
+  Utilises a \textbf{Gaussian pyramid}
 
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
-    Sub-sampling - Shrink the image by half over and over again to
+   \textbf{Sub-sampling} - Shrink the image by half over and over again to
     produce \emph{pyramid representation}.
   \item
-    Gaussian Blur - Blur with different Gaussian kernel widths (make
+    \textbf{Gaussian Blur} - Blur with different Gaussian kernel widths (make
     less/more blurry) in order to highlight \emph{different features} in
     the image.
   \end{enumerate}
-\item
-  \textbf{Different detail is highlighted at different levels}.
-\item
-  Difference between successive images gives the \emph{DoG}.
-\end{itemize}
+  
 
-\subsubsection{Feature Selection \&
-Localisation}\label{feature-selection-localisation}
+  \textbf{Different detail is highlighted at different levels}. \\
 
-\begin{itemize}
-\item
+  Difference between successive images gives the \textbf{Depth of Gaussians}.
+ 
+\subsubsection{SIFT - Feature Selection/Localisation}
+
   Feature selection is done by using the scale pyramid and the
   difference of gaussians to select features that are \emph{distinctive
   at more than one scale}.
-\item
-  Features are only selected if they:
 
+  Features are only selected if they:
+  
   \begin{itemize}
   \itemsep1pt\parskip0pt\parsep0pt
   \item
@@ -743,38 +713,29 @@ Localisation}\label{feature-selection-localisation}
   \item
     Are on a \emph{corner} (i.e. \textbf{peak of DoG})
   \end{itemize}
-\end{itemize}
 
-\subsubsection{Orientation Invariance}\label{orientation-invariance}
+\subsubsection{SIFT - Orientation Invariance}
 
-\begin{itemize}
-\item
   Image gradient computed around each feature at the feature's scale.
-  (Using SOBEL edge-detector)
-\item
+  (Using SOBEL edge-detector) \\
+  
   Feature created for each major orientation (peaks of the 36-bin
   histogram for each feature to represent Gaussian weighted
   orientations) with corresponding orientations.
-\end{itemize}
 
-\subsubsection{Feature Description}\label{feature-description}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Image gradient \emph{invarient} to changes in illumination and
-  contrast (after normalisation)
-\item
-  Gradients \emph{grouped} to give some \textbf{\emph{invariance to
-  small geometrical transformations}}.
-\end{itemize}
+\subsubsection{SIFT - Feature Description}
+
+  Image gradient \textbf{invariant} to changes in illumination and
+  contrast (after normalisation). \\
+
+  Gradients grouped to give some \textbf{invariance to
+  small geometrical transformations}.
+
 
 \subsection{SURF (Speeded Up Robust
 Features)}\label{surf-speeded-up-robust-features}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
   Sped-up version of SIFT that uses lots of small optimisations.
 
   \begin{itemize}
@@ -783,41 +744,39 @@ Features)}\label{surf-speeded-up-robust-features}
     e.g.~Uses \emph{box features} instead of \emph{LOG filters} (Much
     quicker)
   \end{itemize}
-\item
+
   Used mainly for stereo or feature-tracking.
-\end{itemize}
+
 
 \subsection{Feature Detector
-Comparison}\label{feature-detector-comparison}
+Comparison}
 
 \begin{itemize}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  HARRIS Corner Detector is good for \emph{distinctiveness}.
-\item
-  KLT tends to go for \emph{distinctiveness} (quality).
-\item
-  SIFT/SURF tend to go for \emph{``easy to find''} (quantity).
-\item
-  SURF is \emph{more efficient} than SIFT. Both HARRIS and KLT are also
-  fast.
-\item
+  HARRIS/ KLT go for \textbf{distinctiveness} (quality).
+ \item
   HARRIS/KLT find \textbf{\emph{corner-like}} structures.
+\item
+  SIFT/SURF tend to go for \textbf{``easy to find''} (quantity).
+\item
+  SURF is \textbf{more efficient }than SIFT.  HARRIS and KLT are
+  fast.
 \item
   SIFT/SURF find \textbf{\emph{distinctive regions at multiple scales}}.
 \end{itemize}
 
 \section{Feature Tracking}
 
-\subsection{Detection vs Tracking}
+%\subsection{Detection vs Tracking}
+%
+%\begin{itemize}
+%\item \textbf{Detection} involves \textit{finding} a particular object/feature within a given image. 
+%\item \textbf{Tracking} is \textit{monitoring} the movement and detection of the object between multiple scenes.
+%\item If you have a perfect, fast detector you ``don't need" to track.
+%\end{itemize}
 
-\begin{itemize}
-\item \textbf{Detection} involves \textit{finding} a particular object/feature within a given image. 
-\item \textbf{Tracking} is \textit{monitoring} the movement and detection of the object between multiple scenes.
-\item If you have a perfect, fast detector you ``don't need" to track.
-\end{itemize}
-
-\subsection{General Framework for Tracking}
+\subsection{General Framework}
 
 \begin{enumerate}
 \item \textbf{Model} - We have an idea about how something will change.
@@ -829,34 +788,20 @@ Comparison}\label{feature-detector-comparison}
 
 \subsection{Advantages}
 
-\begin{itemize}
+\begin{enumerate}
 \item \textbf{Smooths the Data} - Update your estimate of location based upon \textbf{both} the \textit{prediction} and \textit{measurement}.
 \item \textbf{Constrains Search} - Use \textit{prediction} to reduce the target search area.
-\end{itemize}
+\end{enumerate}
 
-\subsection{Issues}
+\subsection{Disadvantages}
 
-\begin{itemize}
+\begin{enumerate}
 \item \textbf{Initialisation} - If not using detector, where do you start tracking from?
 \item \textbf{Multiple Targets} - Multi-target tracking not easy.
 \item \textbf{Losing Target} - Losing the target due to objects moving \textit{too fast}, or \textit{drifting off target} or \textit{changing appearance}.
-\end{itemize}
+\end{enumerate}
 
-\subsection{Kalman Filter (Rudy. E. Kalman)}
-
-\begin{itemize}
-\item Well known tracking technique used to find the \textbf{estimate of a moving target}.
-\item Once an object starts moving, we expect it to \textit{keep moving} in the \textit{same general direction} and at the \textit{same general speed}.
-\end{itemize}
-
-\subsubsection{Advantages}
-
-\begin{itemize}
-\item More reliable that just relying on the data, or just relying on the model.
-\item Copes with \textit{noise}, \textit{jitter} and \textit{missing information} (e.g. missed detections from face detector etc.)
-\end{itemize}
-
-\subsubsection{Tracking Sources}
+\subsection{Tracking Sources}
 
 \begin{enumerate}
 \item \textbf{Background subtraction} $\rightarrow$ \textit{Pixels grouped into objects} $\rightarrow$ Tracker
@@ -873,11 +818,23 @@ Comparison}\label{feature-detector-comparison}
 \item Can combine \textbf{tracking with detection} (e.g. ``Predator" - TLD).
 \end{itemize}
 
+\subsection{Frameworks/Techniques}
+
+\subsubsection{Kalman Filter (Rudy. E. Kalman)}
+
+Well known tracking technique used to find the \textbf{estimate of a moving target}. \\
+
+Once an object starts moving, we expect it to \textit{keep moving} in the \textit{same general direction} and at the \textit{same general speed}. \\
+
+More reliable that just relying on the data, or just relying on the model.\\
+
+Copes with \textit{noise}, \textit{jitter} and \textit{missing information} (e.g. missed detections from face detector etc).
+
 \section{Object Detection}
 
-\subsection{Description}
-
 Does it contain people? $\rightarrow$ Can we find people? (Localisation) $\rightarrow$ Can we group pixels into meaningful classes? (Can we find Connor Goddard?) \\
+
+Can we group pixels into meaningful classes? (Can we find Connor?) \\
 
 Applications include \textbf{\textit{face detection}} (People counting, face recognition, face tagging) and \textit{\textbf{self-driving cars}}.
 
@@ -958,13 +915,15 @@ Object recognition is a technique for \textbf{\textit{detecting specific objects
 
 \subsection{Bag of Words Framework}
 
-\begin{itemize}
-\item No order, no structure, just features in a bag. 
-\item Requires a training set of \textbf{labelled objects}.
-\item Clusters \textit{features} into \textbf{visual words}.
-\item Makes \textit{no assumption} about the \textbf{spatial} relationships between clusters (e.g. pile of cow parts, standing on it's head etc.).
-\item The model lets the data perform the ``heavy-lifting" to find the features. 
-\end{itemize}
+No order, no structure, just features in a bag. \\
+
+Requires a training set of \textbf{labelled objects}. \\
+
+Clusters \textit{features} into \textbf{visual words}. \\
+
+The model lets the data perform the ``heavy-lifting" to find the features. \\
+
+\textbf{Note:} Makes \textit{no assumption} about the \textbf{spatial} relationships between clusters (e.g. pile of cow parts, standing on it's head etc.). \\
 
 \subsubsection{Algorithm}
 
@@ -984,7 +943,7 @@ Motion is used to detect interesting objects within \emph{video}, and is normall
 \itemsep1pt\parskip0pt\parsep0pt
 \item
  \textbf{Background Subtraction} - Find objects that \textbf{\emph{aren't
-  moving}} and ignore them.
+  moving}} and ignore them. \\
 \item
   \textbf{Optical Flow} - Try to find the motion \textbf{\emph{directly}}.
 \end{enumerate}
@@ -1024,11 +983,11 @@ $$ \| l_n - l_0 \| > T \Longrightarrow Foreground$$
 \subsubsection{Moving Average Background
 Subtraction}
 
-Moving average background subtraction takes the \textit{mean pixel value over a time window}, and then thresholds on that. \\
+\textbf{Deals with drift issues}, caused by \emph{lighting},
+\emph{sensor noise} etc, in order to prevent \emph{everything} being in
+the `\textbf{`foreground''}. \\
 
-Have to account for \textbf{drift}, caused by \emph{lighting},
-\emph{sensor noise} etc. in order to prevent \emph{everything} being in
-the ``foreground''. \\
+Moving average background subtraction takes the \textit{mean pixel value over a time-span}, and then thresholds on that. \\
 
 Builds a background model which is \textbf{\emph{adaptive}}:
 
@@ -1064,7 +1023,7 @@ $$  B_{n-1} = \frac{1}{w}\sum_{j=(n-w)}^{n-1}l_j $$
 
 (e.g. Frame 3 will take an average of Frames 1 and 2, and that will then become the background average for Frame 4 etc.)
 
-\subsubsection{Complex Background Subtraction}
+\subsubsection{Complex Background Subtraction Models}
 
 \textbf{Flicker}
 
@@ -1081,73 +1040,64 @@ Causes include:
 
 This makes finding the part of the time-series where the object crosses the pixel much harder.\\
 
-\textbf{Complex Models} \\
-
 Common traits with each model:
 
+Each pixel is treated as a \textbf{time-series}. \\
+
+Noise processes are \textbf{modelled explicitly}.
 \begin{itemize}
-\item Each pixel is treated as a \textbf{time-series}.
-\item Noise processes are modelled explicitly.
-\begin{itemize}
-\item Dealing with specific types of noise (e.g. shadow).
+ \item Dealing with specific types of noise (e.g. shadow).
 \end{itemize}
-\item A post-processing step might be used to get rid of small false detections.
+
+ A \textbf{post-processing} step might be used to get rid of \textbf{small false detections}.
 \begin{itemize}
 \item Simple smoothing, removing detections that are just one pixel .
-\end{itemize}
 \end{itemize}
 
 Once you have made a decision about what is foreground and what is background, you can use this to update the background model as appropriate. \\
 
-Instead of taking an average of \textit{everything} in the image, we now only update our moving average model with the things in the image that we \textbf{do not} think are moving. \\
+Instead of taking an average of \textit{\textbf{everything}} in the image, we now only update our moving average model with the things in the image that we \textbf{do not} think are moving. \\
 
-\textbf{Complications}
+\textbf{Issues}
 
 \begin{enumerate}
-\item 3D - R, G and B need to be thought about as a single entity (RGB) that \textit{varies together}.
-\item Variation \textit{is not constant} - Some objects/noise will vary more than others
+\item \textbf{Variation} \textit{is not constant} - Some objects/noise will vary more than others
 \begin{itemize}
 \item Simple threshold cannot take this into account.
-\item Noise is often Gaussian.
-\item Model each pixel as a Gaussian.
+\item Noise is often Gaussian. (Model each pixel as a Gaussian.)
 \end{itemize}
-\item Flicker - The background at a particular place/pixel could be \textit{more than one color}.
-\item Gaussian - Determining \textbf{one} Gaussian is easy. Multiple Gaussians requires \textit{machine learning}.
+\item \textbf{Flicker} - The background at a particular place/pixel could be \textit{more than one color}. (e.g. leaves, TV screens etc).
+\item \textbf{Gaussian} - Determining \textbf{one} Gaussian is easy. Multiple Gaussians requires \textit{machine learning}.
 \end{enumerate}
 
 \subsubsection{Mixture of Gaussians Background Modelling (Gaussian Mixture Modelling)}
 
-\begin{itemize}
-\item In 2D, a Gaussian is defined by a \textit{mean} and \textit{standard deviation}. 
-\item Instead of using a \textbf{\textit{constant threshold}}, use a threshold based on the \textit{\textbf{width of the Gaussian}}.
-\item Pixels with a \textit{lot of noise} have a \textbf{\textit{higher threshold}}. 
-\item Known also as \textit{Gaussian Mixture Modelling}.
-\item Instead of taking one average of the Gaussian model, you take multiple averages. 
-\item With three gaussians, we would say each pixel can have up to three different shades of colour in the gaussian.
-\item This approach gives a better approach to handling noise when applying background subtraction. 
-\end{itemize}
+ Instead of using a \textbf{\textit{constant threshold}}, use a threshold based on the \textit{\textbf{width of the Gaussian}}.\\
 
-\textbf{Pros}
+ Pixels with a \textit{lot of noise} have a \textbf{\textit{higher threshold}}. \\
+  
+ Instead of taking one average of the Gaussian model, you take multiple averages. \\
+ 
+ With three Gaussians, we would say each pixel can have up to three different shades of colour in the Gaussian.\\
+ 
+ This approach gives a better approach to handling noise when applying background subtraction. \\
 
-\begin{enumerate}
-\item Deals with complicated backgrounds.
-\item Robust to noise.
-\item Can handle/detect shadows.
-\end{enumerate}
+ Deals with \textbf{complicated backgrounds}, can handle/detect \textbf{shadows} and robust to noise.
+
 
 \subsection{Optical Flow}
 
-\textbf{Description} \\
+ \textbf{Optical Flow} is the apparent motion of brightness patterns on the image. \\
+ 
+ The \textbf{Motion Field} is the projection of objects in the world onto the image plane.
 
- \textbf{Optical Flow} is the apparent motion of brightness patterns on the image. \textbf{Motion Field} is the projection of objects in the world onto the image plane. \\
+\subsubsection{Issues} 
 
-\textbf{Issues} \\
-
-Optical Flow is only an \textbf{approximation} of the motion field.
+Optical Flow is only an \textbf{approximation} of the motion field:
 
 \begin{enumerate}
-\item Apparent Motion - When either an object appears to \textbf{not} be moving when it actually \textbf{is}, or vice-versa.
-\item Aperture Problem - When you observe a small part of the scene, it is difficult to figure out what motion is occurring. (e.g. ``Barber's Pole" illusion - Motion field is \textbf{horizontal}, but optical flow indicates the stripes move \textbf{vertically}.) 
+\item \textbf{Apparent Motion}- When either an object appears to \textbf{not} be moving when it \textbf{actually is}, or vice-versa.
+\item \textbf{Aperture Problem} - When you observe a small part of the scene, it is difficult to figure out what motion is occurring. (e.g. ``Barber's Pole" illusion - Motion field is \textbf{horizontal}, but optical flow indicates the stripes move \textbf{vertically}.) 
 \end{enumerate}
 
 \subsubsection{Dense Optical Flow}
@@ -1156,7 +1106,7 @@ Designed to show the \textbf{direction of motion} for \textit{every} \textbf{pix
 
 \begin{enumerate}
 \item \textbf{Appearance-Based } - Looks for movement between pixels in two images and attempts to find the vector between them. 
-\item \textbf{Differential Method} (Horn \& Schunck, 1981) - Assume points \textit{between images} will have roughly the same brightness, find nearby points that satisfy this and then calculate the \textbf{direction of travel}. \\ \\ Optical Flow Constraint Equation:  $u\frac{\delta I}{\delta x} + v\frac{\delta I}{\delta y} + \frac{\delta I}{\delta t} = 0 $
+\item \textbf{Differential Method} (Horn \& Schunck, 1981) - Assume points \textit{between images} will have roughly the same brightness, find nearby points that satisfy this and then calculate the \textbf{direction of travel}. \\ \\ \textbf{O-F Constraint Equation:} $u\frac{\delta I}{\delta x} + v\frac{\delta I}{\delta y} + \frac{\delta I}{\delta t} = 0 $
 \end{enumerate}
 
 \subsubsection{Sparse Optical Flow (Feature Tracking)}
@@ -1184,24 +1134,22 @@ Sparse Optical Flow works by finding the \textit{same feature} throughout multip
 
 \textbf{Advantages}
 
-\begin{itemize}
-\item Tracking Ability.
-\item Speed.
-\item Robustness (Features by their very nature should be easy to find).
-\end{itemize}
+\begin{enumerate}
+\item \textbf{Tracking Ability}.
+\item \textbf{Speed}.
+\item \textbf{Robustness} (Features by their very nature should be easy to find).
+\end{enumerate}
 
 \textbf{Disadvantages}
 
-\begin{itemize}
-\item Tracking Ability - Issue starts if you are wanting to look only for \textit{moving features} - Perform BG subtraction first, then pass into feature detector.
-\item Getting Lost (e.g. screen edge, occlusions)
-\item Robustness (Features by their very nature should be easy to find).
-\item Have to decide where to \textit{re-initialise}. 
-\end{itemize}
+\begin{enumerate}
+\item \textbf{Tracking Ability} - Issue starts if you are wanting to look only for \textit{moving features} - Perform BG subtraction first, then pass into feature detector.
+\item \textbf{Getting Lost} (e.g. screen edge, occlusions)
+\item \textbf{Robustness} (Features by their very nature should be easy to find).
+\item \textbf{Re-initialisation} - Have to decide where to \textit{start}. 
+\end{enumerate}
 
 \section{2D to 3D}
-
-Involves 5 key methods:
 
 \begin{enumerate}
 \item \textbf{Shape from Shading} - 1 image, 1 viewpoint, 1 light-source, lots of assumptions.
@@ -1441,7 +1389,7 @@ $$ d(x, y) = \sqrt{\sum_{i}\sum_{j}[I(x + i, y + j) - A(i, j)]^2}$$
 where $I$ is the whole image, $A$ is the appearance image of the target object ($A$ is always smaller than $I$), $i$ is the current \textbf{horizontal} position, and $j$ is the 
 current \textbf{vertical} position. \\
 
-Euclidean Distance is \textbf{not normalised} (issue with variations in brightness). \\
+%Euclidean Distance is \textbf{not normalised} (issue with variations in brightness). \\
 
 Calculate SSD by removing the square root.
 
@@ -1530,10 +1478,10 @@ Describes the performance of a \textbf{classification/categorisation} system. \\
 
 Predicted truth along the X-axis, ground truth along the Y-axis. Diagonal is the \textit{correctly-predicted} value.
 
-\begin{figure}[ht!]      
-	\centering 
-	\includegraphics[scale=0.3]{confusion_matrix.png}
-\end{figure}
+%\begin{figure}[ht!]      
+%	\centering 
+%	\includegraphics[scale=0.3]{confusion_matrix.png}
+%\end{figure}
 
 \subsection{Report Measures}
 
@@ -1559,5 +1507,23 @@ $$Min = \frac{area(A \cap B)}{min(area(A), areas(B))}$$
 or \textbf{bounding box union}:
 
 $$Union = \frac{area(A \cap B)}{area(A \cup B)}$$
+
+\section{People Counting Notes}
+
+\begin{itemize}
+\item Face Detection (Viola-Jones).
+\item Human Detection/Body-Pose Detection (3D-model fitting/projection). - Issue: More variation this way.
+\item Use of \textbf{SIFT} to detect at multiple scales. (SIFT too slow to use in real-time?)
+\item Incorporate \textbf{tracking} into \textbf{detection} (requires \textbf{motion/video}).
+\begin{itemize}
+\item \textbf{Feedback Loop} - Focusses search on particular area (e.g. \textit{Kalman Filter}).
+\end{itemize}
+\item \textbf{Correlate} face/feature detections with thermal imaging (via \textit{multi-spectral/infra-red} cameras) (might be an issue with engines etc.)
+\item Use of \textbf{optical flow} to capture/correlate \textit{patterns of movement} in addition to feature detection. (Useful for \textit{outdoor envrionments} (e.g. rain)
+\item Multi-camera set-up (360 degree view). 
+\item Occlusion Detection - Airport ``security'' screens - Human-like occlusions. 
+\item Depth from De-focus - Narrow depth-of-field lens focussing only on \textit{linear} area of people (e.g. underground escalator) - Detect in-focus objects as people (assuming only people use the escalator)
+
+\end{itemize}
 
 \end{document}
